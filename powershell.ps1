@@ -1,113 +1,85 @@
 do {
-    function Salida {
-        if($args[0] -eq $True) {
-            Write-Host "Tarea ejecutada exitosamente" -ForegroundColor White -BackgroundColor Green
-        }else {
-            Write-Host "Ha habido un error" -ForegroundColor White -BackgroundColor Red
-        }
-    }
+    . ".\out.ps1"
+    . ".\spanish.ps1"
     # Para agregar color usar -ForegroundColor DarkGreen -BackgroundColor White
     Clear-Host
-    Write-Host "[1] - Instalar drivers"
-    Write-Host "[2] - Extraer boot"
-    Write-Host "[3] - Rootear"
-    Write-Host "[4] - Desrootear"
+    Write-Host $var1
+    Write-Host $var2
+    Write-Host $var3
+    Write-Host $var4
     Write-Host ""
-    Write-Host "[0] - Exit"
-    $externa = Read-Host "Please put your choice"
+    Write-Host $var0
+    $ext = Read-Host $varChoice
 
-    switch($externa){
+    switch($ext){
         1 {
             Write-Host ""
-            Write-Host "Instalando drivers, por favor espere.."
+            Write-Host $varInstalling
             Get-ChildItem .\drivers -Recurse -Filter "*.inf" | ForEach-Object { PNPUtil.exe -i -a $_.FullName}
-            $salida = $?
-            Write-Host ""
-            Salida $salida
-            pause
-            ; break
+            OutSwitch
         }
         2 {
             do {
                 Clear-Host
                 Write-Host ""
-                Write-Host "[1] - Bootear con TWRP"
-                Write-Host "[2] - Extraer boot.img"
-                Write-Host "[3] - Subir boot.img"
-                Write-Host "[4] - Bajar patched_boot.img"
+                Write-Host $var21
+                Write-Host $var22
+                Write-Host $var23
+                Write-Host $var24
                 Write-Host ""
-                Write-Host "[0] - Exit"
-                $interna = Read-Host "Please put your choice"
+                Write-Host $var0
+                $int = Read-Host $varChoice
 
-                switch($interna){
+                switch($int){
                     1 {
-                        Read-Host "Presiona cualquier tecla para iniciar en modo fastboot"
+                        Read-Host $var211
                         adb reboot bootloader
                         Clear-Host
                         Write-Host ""
-                        Read-Host "Cuando su móvil esté en modo fastboot presione cualquier tecla para continuar.."
+                        Read-Host $var212
                         Clear-Host
                         Write-Host ""
-                        Write-Host "Booteando con TWRP, por favor espere.."
+                        Write-Host $var213
                         fastboot boot twrp.img
-                        $salida = $?
-                        Write-Host ""
-                        Salida $salida
-                        pause
-                        ; break
-                        
+                        SalidaSwitch
                     }
                     2 {
                         Write-Host ""
-                        Write-Host "Extrayendo imagen boot.img, por favor espere.."
+                        Write-Host $var221
                         adb pull /dev/block/mmcblk0p62 ./boot.img
-                        $salida = $?
-                        Write-Host ""
-                        Salida $salida
-                        pause
-                        ; break
+                        SalidaSwitch
                     }
                     3 {
                         Write-Host ""
-                        Write-Host "Subiendo imagen boot.img, por favor espere.."
+                        Write-Host $var231
                         adb push ./boot.img /storage/emulated/0
-                        $salida = $?
-                        Write-Host ""
-                        Salida $salida
-                        pause
-                        ; break
+                        SalidaSwitch
                     }
                     4 {
                         Write-Host ""
-                        Write-Host "Extrayendo imagen boot.img, por favor espere.."
+                        Write-Host $var241
                         adb pull /storage/emulated/0/ ./patched_boot.img
-                        $salida = $?
-                        Write-Host ""
-                        Salida $salida
-                        pause
-                        ; break
+                        SalidaSwitch
                     }
                 }
-            } while($interna -ne 0)
+            } while($int -ne 0)
         }
         3 {
             do {
                 Clear-Host
                 Write-Host ""
-                Write-Host "[1] - Rootear"
+                Write-Host $var31
                 Write-Host ""
-                Write-Host "[0] - Exit"
-                $interna = Read-Host "Please put your choice"
+                Write-Host $var0
+                $int = Read-Host $varChoice
 
-                switch($interna){
+                switch($int){
                     1 {
                         Write-Host ""
-                        Write-Host "Rooteando su dispositivo, por favor espere.."
+                        Write-Host $var311
                         Write-Host "fastboot flash boot_a magisk_patched.img"
                         Write-Host "fastboot flash boot_b magisk_patched.img"
-                        Write-Host ""
-                        pause
-                        ; break
+                        SalidaSwitch
                     }
                     2 {
                         Write-Host ""
@@ -118,7 +90,7 @@ do {
                         ; break
                     }
                 }
-            } while($interna -ne 0)
+            } while($int -ne 0)
         }
         4 {
             do {
@@ -128,7 +100,7 @@ do {
                 Write-Host "[2] - Extraer boot.img"
                 Write-Host ""
                 Write-Host "[0] - Exit"
-                $interna = Read-Host "Please put your choice"
+                $int = Read-Host "Please put your choice"
 
                 switch($interna){
                     1 {
@@ -152,4 +124,4 @@ do {
             } while($interna -ne 0)
         }
     }
-} while($externa -ne 0)
+} while($ext -ne 0)
